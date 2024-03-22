@@ -19,22 +19,29 @@
     </style>
 </head>
 <body>
+    <h1>TicTacToe</h1><br>
     <div class="grid">
         <!-- Cells will be dynamically added here -->
     </div>
 
     <script>
-        const grid = document.querySelector('.grid');
+        const taulell = [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ];
+        const grido = document.querySelector('.grid');
 
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
-                cell.textContent = `${i},${j}`;
+                //cell.textContent = `${x},${y}`;
+                cell.textContent = `hola ${taulell[x][y]}`;
                 cell.addEventListener('click', function() {
-                    alert(`Clicked on cell ${i},${j}`);
+                    alert(`Clicked on cell ${x},${y}`);
                 });
-                grid.appendChild(cell);
+                grido.appendChild(cell);
             }
         }
     </script>
