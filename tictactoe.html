@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid with Cell Coordinates</title>
+    <style>
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+        }
+        .cell {
+            border: 1px solid black;
+            text-align: center;
+            padding: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid">
+        <!-- Cells will be dynamically added here -->
+    </div>
+
+    <script>
+        const grid = document.querySelector('.grid');
+
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.textContent = `${i},${j}`;
+                cell.addEventListener('click', function() {
+                    alert(`Clicked on cell ${i},${j}`);
+                });
+                grid.appendChild(cell);
+            }
+        }
+    </script>
+</body>
+</html>
+
