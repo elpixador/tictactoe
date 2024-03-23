@@ -25,23 +25,22 @@
     </div>
 
     <script>
-        const taulell = [
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9]
-        ];
-        const grido = document.querySelector('.grid');
+        const icona = ['X', 'O'];
+        var jugador = 0;
+        const grid = document.querySelector('.grid');
 
         for (let x = 0; x < 3; x++) {
             for (let y = 0; y < 3; y++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
                 //cell.textContent = `${x},${y}`;
-                cell.textContent = `hola ${taulell[x][y]}`;
+                cell.textContent = `·`;
                 cell.addEventListener('click', function() {
-                    alert(`Clicked on cell ${x},${y}`);
+                    //alert(`Clicked on cell ${x},${y}`);
+                    cell.textContent = icona[jugador];
+                    jugador = (jugador+1) % 2;
                 });
-                grido.appendChild(cell);
+                grid.appendChild(cell);
             }
         }
     </script>
