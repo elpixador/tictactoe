@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grid with Cell Coordinates</title>
+    <title>Tic Tac Toe</title>
     <style>
         .grid {
             display: grid;
@@ -17,28 +17,83 @@
             cursor: pointer;
         }
     </style>
+    <script>
+        const taulell = [
+            [null, null, null],
+            [null, null, null],
+            [null, null, null]
+        ];
+        const icona = ['X', 'O'];
+        var jugador = 0;
+        var numJugada = 0;
+
+        function gameover(cela) {
+            const img = document.createElement("img");
+            img.src = "https://w7.pngwing.com/pngs/884/996/png-transparent-pingu-waiting-cartoons-pingu-thumbnail.png";
+            cela.parentNode.appendChild(img);
+        }
+        
+        function haGuanyat(x, y) {
+            const guanyat = (
+                (
+                    (taulell[x][0] == jugador) &&
+                    (taulell[x][1] == jugador) &&
+                    (taulell[x][2] == jugador)
+                ) || (
+                    (taulell[0][y] == jugador) &&
+                    (taulell[1][y] == jugador) &&
+                    (taulell[2][y] == jugador)                    
+                ) || (
+                    (taulell[0][0] == jugador) &&
+                    (taulell[1][1] == jugador) &&
+                    (taulell[2][2] == jugador)
+                ) || (
+                    (taulell[0][2] == jugador) &&
+                    (taulell[1][1] == jugador) &&
+                    (taulell[2][0] == jugador)                    
+                )
+            );            
+            return guanyat;
+        }
+
+        function tirada(cela, x, y) {
+            if (taulell[x][y] != null) {
+                alert("No pots tirar aquí");
+                return false;
+            }
+            taulell[x][y] = jugador;
+            cela.textContent = icona[jugador];
+
+            if (haGuanyat(x, y)) {                
+                alert('Has guanyat, jugador ' + icona[jugador]);
+                gameover(cela);
+            }
+            
+            jugador = (jugador+1) % 2;
+            if (++numJugada == 9) {
+                alert(`Heu perdut els dos`);
+                gameover(cela);
+            }
+        }
+
+    </script>
 </head>
 <body>
     <h1>TicTacToe</h1><br>
     <div class="grid">
         <!-- Cells will be dynamically added here -->
-    </div>
+    </div>    
 
     <script>
-        const icona = ['X', 'O'];
-        var jugador = 0;
         const grid = document.querySelector('.grid');
 
         for (let x = 0; x < 3; x++) {
             for (let y = 0; y < 3; y++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
-                //cell.textContent = `${x},${y}`;
-                cell.textContent = `·`;
+                cell.textContent = `·`; // `${x},${y}`;
                 cell.addEventListener('click', function() {
-                    //alert(`Clicked on cell ${x},${y}`);
-                    cell.textContent = icona[jugador];
-                    jugador = (jugador+1) % 2;
+                    tirada(cell, x, y);
                 });
                 grid.appendChild(cell);
             }
