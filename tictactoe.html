@@ -27,7 +27,8 @@
         var jugador = 0;
         var numJugada = 0;
 
-        function gameover(cela) {
+        function gameover(cela, text) {
+            setTimeout(function() { alert(text); }, 10);
             const img = document.createElement("img");
             img.src = "https://w7.pngwing.com/pngs/884/996/png-transparent-pingu-waiting-cartoons-pingu-thumbnail.png";
             cela.parentNode.appendChild(img);
@@ -64,15 +65,14 @@
             taulell[x][y] = jugador;
             cela.textContent = icona[jugador];
 
-            if (haGuanyat(x, y)) {                
-                alert('Has guanyat, jugador ' + icona[jugador]);
-                gameover(cela);
+            if (haGuanyat(x, y)) {    
+                gameover(cela, "Has guanyat, jugador " + icona[jugador]);
             }
-            
-            jugador = (jugador+1) % 2;
-            if (++numJugada == 9) {
-                alert(`Heu perdut els dos`);
-                gameover(cela);
+            else if (++numJugada == 9) {
+                gameover(cela, "Heu perdut els dos");
+            }
+            else {
+                jugador = (jugador+1) % 2;
             }
         }
 
