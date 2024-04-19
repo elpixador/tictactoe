@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        .grid {
+            border: 1px solid black;
+        }
+        .cell {
+            border: 1px solid black;
+            text-align: center;
+            cursor: pointer;
+            width: 100px;
+            height: 100px;
+        }
+        img {
+            width: 100%;
+            display: block;
+        }
+
+    </style>
+    <script>
+        const icona = ['X', 'O'];
+        var icones = [
+            [
+                {src: "", img: null},
+                {src: "atom-blau-1.gif", img: null},
+                {src: "atom-blau-2.gif", img: null},
+                {src: "atom-blau-3.gif", img: null},
+                {src: "atom-blau-4.gif", img: null}
+            ],
+            [
+                {src: "", img: null},
+                {src: "atom-vermell-1.gif", img: null},
+                {src: "atom-vermell-2.gif", img: null},
+                {src: "atom-vermell-3.gif", img: null},
+                {src: "atom-vermell-4.gif", img: null}
+            ]
+        ];
+        var taulell = [];
+        var jugador = 0;
+        var numJugada = 0;
+
+        function gameover(text) {
+            const img = document.createElement("img");
+            img.src = "https://w7.pngwing.com/pngs/884/996/png-transparent-pingu-waiting-cartoons-pingu-thumbnail.png";
+            taulell[0][0].cela.parentNode.parentNode.appendChild(img);
+            setTimeout(function() { alert(text); }, 10);
+        }
+        
+        function haGuanyat(x, y) {
+            const guanyat = false;
+            return guanyat;
+        }
+
+        function tirada(x, y) {
+            cela = taulell[y][x];
+
+            if (cela.ply == null) {
+                cela.ply = jugador;
+                cela.num = 1;
+            }
+            else if (cela.ply == jugador) {
+                cela.num = cela.num + 1;
+                if (cela.num > cela.max) {
+                    alert("PUF");
+                }
+            }
+            else {
+                alert("No pots tirar aquí");
+                return false;
+            }
+
+            cela.img.src = icones[cela.ply][cela.num].img.src;
+
+            if (haGuanyat(x, y)) {    
+                gameover("Has guanyat, jugador " + icona[jugador]);
+            }
+            else {
+                jugador = (jugador+1) % 2;
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <h1>Atomic</h1><br>
+    <table class="grid">
+        <!-- Cells will be dynamically added here -->
+    </table>    
+
+    <script>
+        // Preload imatges
+        for (let j = 0; j < 2; j++) {
+            for (let n = 0; n < 5; n++) {
+                icones[j][n].img = document.createElement("img");
+                if (icones[j][n].src == null) icones[j][n].img.src = ""
+                else icones[j][n].img.src = "anim/"+icones[j][n].src;
+            }
+        }
+
+        // Crea el taulell
+        const grid = document.querySelector('.grid');
+        for (let y = 0; y < 8; y++) {
+            let fila = []
+            const row = document.createElement('tr');            
+            for (let x = 0; x < 8; x++) {
+                const cell = document.createElement('td');
+                cell.className = 'cell';
+                cell.addEventListener('click', function() {
+                    tirada(x, y);
+                });
+                const img = document.createElement("img");
+                cell.appendChild(img);
+                row.appendChild(cell);
+                let max = 4;
+                if ((y == 0) || (y == 7)) max--;
+                if ((x == 0) || (x == 7)) max--;
+                fila[x] = {img: img, ply: null, num: 0, max: max};
+            }
+            taulell[y] = fila;
+            grid.appendChild(row);
+        }
+    </script>
+</body>
+</html>
+
