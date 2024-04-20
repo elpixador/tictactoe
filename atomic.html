@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic Tac Toe</title>
+    <title>Atomic</title>
     <style>
         .grid {
             border: 1px solid black;
@@ -22,68 +22,110 @@
 
     </style>
     <script>
-        const icona = ['X', 'O'];
+        const icona = ['blau', 'vermell'];
         var icones = [
             [
                 {src: "", img: null},
                 {src: "atom-blau-1.gif", img: null},
                 {src: "atom-blau-2.gif", img: null},
-                {src: "atom-blau-3.gif", img: null},
-                {src: "atom-blau-4.gif", img: null}
+                {src: "atom-blau-3.gif", img: null}
             ],
             [
                 {src: "", img: null},
                 {src: "atom-vermell-1.gif", img: null},
                 {src: "atom-vermell-2.gif", img: null},
-                {src: "atom-vermell-3.gif", img: null},
-                {src: "atom-vermell-4.gif", img: null}
+                {src: "atom-vermell-3.gif", img: null}
             ],
             [
-                {src: "impact02.gif", img: null}
+                {src: "Impact02.gif", img: null}
             ]
         ];
         var taulell = [];
         var jugador = 0;
         var numJugada = 0;
+        var enTirada = false;
 
         function gameover(text) {
-            const img = document.createElement("img");
-            img.src = "https://w7.pngwing.com/pngs/884/996/png-transparent-pingu-waiting-cartoons-pingu-thumbnail.png";
-            taulell[0][0].cela.parentNode.parentNode.appendChild(img);
-            setTimeout(function() { alert(text); }, 10);
+            setTimeout(function() { alert(text); }, 500);
         }
         
-        function haGuanyat(x, y) {
-            const guanyat = false;
-            return guanyat;
+        function haGuanyat(ply) {
+            if (numJugada < 3) return false;
+            for (let y = 0; y < taulell.length; y++) {
+                for (let x = 0; x < taulell[y].length; x++) {
+                    let pp = taulell[y][x].ply;
+                    if ((pp != null) && (pp != ply)) return false;
+                }
+            }
+            return true;
+        }
+
+        function avalua(ply) {
+            // Dibuixa icones i s'apunta on toca explosió
+            let puf = [];
+            for (let y = 0; y < taulell.length; y++) {
+                for (let x = 0; x < taulell[y].length; x++) {
+                    let cela = taulell[y][x];
+                    if (cela.ply == null) cela.img.src = ""
+                    else {
+                        if (cela.num <= cela.max) cela.img.src = icones[cela.ply][cela.num].img.src
+                        else puf.push({x: x, y: y, cela: cela});
+                    }
+                }
+            }
+
+            // Si no cal explotar res
+            if (puf.length == 0) {
+                if (haGuanyat(ply)) {
+                    gameover("Has guanyat, jugador " + icona[jugador]);
+                }
+                else {
+                    jugador = (jugador+1) % 2;
+                    enTirada = false;
+                }
+            }
+            // Si cal explotar caselles
+            else {
+                for (let cela of puf) {
+                    cela.cela.ply = null;
+                    cela.cela.num = 0;
+                    cela.cela.img.src = icones[2][0].img.src;
+
+                    let x = cela.x;
+                    let y = cela.y;
+                    if (y > 0) {
+                        taulell[y-1][x].ply = ply;
+                        taulell[y-1][x].num++;
+                    }
+                    if (y < taulell.length-1) {
+                        taulell[y+1][x].ply = ply;
+                        taulell[y+1][x].num++;
+                    }
+                    if (x > 0) {
+                        taulell[y][x-1].ply = ply;
+                        taulell[y][x-1].num++;
+                    }
+                    if (x < taulell[0].length-1) {
+                        taulell[y][x+1].ply = ply;
+                        taulell[y][x+1].num++;
+                    }
+                }
+                setTimeout(function() { avalua(ply); }, 1000); // Repetim avaluació
+            }
         }
 
         function tirada(x, y) {
+            if (enTirada == true) return false;            
+
             cela = taulell[y][x];
-
-            if (cela.ply == null) {
+            if ((cela.ply == null) || (cela.ply == jugador)) {
+                enTirada = true;
                 cela.ply = jugador;
-                cela.num = 1;
+                cela.num++;
+                numJugada++;
+                avalua(jugador);
             }
-            else if (cela.ply == jugador) {
-                cela.num = cela.num + 1;
-                if (cela.num > cela.max) {
-                    alert("PUF");
-                }
-            }
-            else {
-                alert("No pots tirar aquí");
-                return false;
-            }
-
-            cela.img.src = icones[cela.ply][cela.num].img.src;
-
-            if (haGuanyat(x, y)) {    
-                gameover("Has guanyat, jugador " + icona[jugador]);
-            }
-            else {
-                jugador = (jugador+1) % 2;
-            }
+            //else alert("No pots tirar aquí");
         }
 
     </script>
@@ -118,7 +160,8 @@
                 const img = document.createElement("img");
                 cell.appendChild(img);
                 row.appendChild(cell);
-                let max = 4;
+
+                let max = 3;
                 if ((y == 0) || (y == 7)) max--;
                 if ((x == 0) || (x == 7)) max--;
                 fila[x] = {img: img, ply: null, num: 0, max: max};
