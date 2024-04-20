@@ -37,6 +37,9 @@
                 {src: "atom-vermell-2.gif", img: null},
                 {src: "atom-vermell-3.gif", img: null},
                 {src: "atom-vermell-4.gif", img: null}
+            ],
+            [
+                {src: "impact02.gif", img: null}
             ]
         ];
         var taulell = [];
@@ -93,8 +96,8 @@
 
     <script>
         // Preload imatges
-        for (let j = 0; j < 2; j++) {
-            for (let n = 0; n < 5; n++) {
+        for (let j = 0; j < icones.length; j++) {
+            for (let n = 0; n < icones[j].length; n++) {
                 icones[j][n].img = document.createElement("img");
                 if (icones[j][n].src == null) icones[j][n].img.src = ""
                 else icones[j][n].img.src = "anim/"+icones[j][n].src;
