@@ -46,7 +46,7 @@
         var enTirada = false;
 
         function gameover(text) {
-            setTimeout(function() { alert(text); }, 500);
+            setTimeout(function() { alert(text); }, 1000);
         }
         
         function haGuanyat(ply) {
@@ -69,27 +69,30 @@
                     if (cela.ply == null) cela.img.src = ""
                     else {
                         if (cela.num <= cela.max) cela.img.src = icones[cela.ply][cela.num].img.src
-                        else puf.push({x: x, y: y, cela: cela});
+                        else {
+                            puf.push({x: x, y: y, cela: cela});
+                            cela.img.src = icones[2][0].img.src; // explosió
+                        }
                     }
                 }
             }
 
+            // Mira si ha acabat la partida
+            if (haGuanyat(ply)) {
+                gameover("Has guanyat, jugador " + icona[jugador]);
+                return true
+            }
+
             // Si no cal explotar res
             if (puf.length == 0) {
-                if (haGuanyat(ply)) {
-                    gameover("Has guanyat, jugador " + icona[jugador]);
-                }
-                else {
-                    jugador = (jugador+1) % 2;
-                    enTirada = false;
-                }
+                jugador = (jugador+1) % 2;
+                enTirada = false;
             }
             // Si cal explotar caselles
             else {
                 for (let cela of puf) {
                     cela.cela.ply = null;
                     cela.cela.num = 0;
-                    cela.cela.img.src = icones[2][0].img.src;
 
                     let x = cela.x;
                     let y = cela.y;
