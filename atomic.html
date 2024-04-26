@@ -66,6 +66,10 @@
             for (let y = 0; y < taulell.length; y++) {
                 for (let x = 0; x < taulell[y].length; x++) {
                     let cela = taulell[y][x];
+                    
+                    if (cela.num == cela.oldnum) continue;
+                    cela.oldnum = cela.num;
+
                     if (cela.ply == null) cela.img.src = ""
                     else {
                         if (cela.num <= cela.max) cela.img.src = icones[cela.ply][cela.num].img.src
@@ -167,7 +171,7 @@
                 let max = 3;
                 if ((y == 0) || (y == 7)) max--;
                 if ((x == 0) || (x == 7)) max--;
-                fila[x] = {img: img, ply: null, num: 0, max: max};
+                fila[x] = {img: img, ply: null, num: 0, max: max, oldnum: 0};
             }
             taulell[y] = fila;
             grid.appendChild(row);
