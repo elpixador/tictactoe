@@ -41,6 +41,7 @@
             ]
         ];
         var taulell = [];
+        var tornImg = null;
         var jugador = 0;
         var numJugada = 0;
         var enTirada = false;
@@ -90,6 +91,7 @@
             // Si no cal explotar res
             if (puf.length == 0) {
                 jugador = (jugador+1) % 2;
+                tornImg.src = icones[jugador][1].img.src;
                 enTirada = false;
             }
             // Si cal explotar caselles
@@ -138,10 +140,20 @@
     </script>
 </head>
 <body>
-    <h1>Atomic</h1><br>
-    <table class="grid">
-        <!-- Cells will be dynamically added here -->
-    </table>    
+    <h1>Atomic</h1>
+    <table>
+        <tr>
+            <td>
+                <table class="grid">
+                    <!-- Cells will be dynamically added here -->
+                </table>
+            </td>
+            <td style="background-color: lightgray;">&nbsp;&nbsp;&nbsp;</td>
+            <td valign="top">
+                <div class="torn">Torn: </div>
+            </td>
+        </tr>
+    </table>
 
     <script>
         // Preload imatges
@@ -154,7 +166,7 @@
         }
 
         // Crea el taulell
-        const grid = document.querySelector('.grid');
+        let grid = document.querySelector('.grid');
         for (let y = 0; y < 8; y++) {
             let fila = []
             const row = document.createElement('tr');            
@@ -176,6 +188,13 @@
             taulell[y] = fila;
             grid.appendChild(row);
         }
+
+        // Indicador de torn
+        let torn = document.querySelector('.torn');
+        torn.className = 'cell';
+        tornImg = document.createElement("img");
+        tornImg.src = icones[jugador][1].img.src;
+        torn.appendChild(tornImg);
     </script>
 </body>
 </html>
