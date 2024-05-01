@@ -42,6 +42,8 @@
         ];
         var taulell = [];
         var tornImg = null;
+        var clicAud = null;
+        var bombAud = null;
         var jugador = 0;
         var numJugada = 0;
         var enTirada = false;
@@ -96,6 +98,8 @@
             }
             // Si cal explotar caselles
             else {
+                bombAud.currentTime = 0;
+                bombAud.play();
                 for (let cela of puf) {
                     cela.cela.ply = null;
                     cela.cela.num = 0;
@@ -132,6 +136,7 @@
                 cela.ply = jugador;
                 cela.num++;
                 numJugada++;
+                clicAud.play();
                 avalua(jugador);
             }
             //else alert("No pots tirar aquí");
@@ -165,11 +170,19 @@
             }
         }
 
+        // Càrrega de sons
+        clicAud = document.createElement('audio');
+        clicAud.preload = "auto";
+        clicAud.src = "audio/click.mp3";
+        bombAud = document.createElement('audio');
+        bombAud.preload = "auto";
+        bombAud.src = "audio/bomb.mp3";
+
         // Crea el taulell
         let grid = document.querySelector('.grid');
         for (let y = 0; y < 8; y++) {
             let fila = []
-            const row = document.createElement('tr');            
+            const row = document.createElement('tr');
             for (let x = 0; x < 8; x++) {
                 const cell = document.createElement('td');
                 cell.className = 'cell';
